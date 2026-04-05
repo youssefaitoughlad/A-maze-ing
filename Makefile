@@ -1,4 +1,5 @@
 Makefile
+
 Include a Makefile in your project to automate common tasks. It must contain the
 following rules (mandatory lint implies the specified flags; it is strongly recommended to
 try –strict for enhanced checking):
@@ -15,3 +16,4 @@ A-Maze-ing This is the way
 --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs
 --check-untyped-defs
 • lint-strict (optional): Execute the commands flake8 . and mypy . --strict
+
