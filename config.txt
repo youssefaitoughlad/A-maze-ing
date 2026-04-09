@@ -1,6 +1,7 @@
-WIDTH = 15  
+WIDTH =12
 HEIGHT = 15
-ENTRY = 0hd, 1ld
-EXIT = 13,   14
-OUTPUT_FILE = maze.tt
+ENTRY = 1,1
+eXit =2,2
+OUTPUT_FILE = maze.txt
 PERFECT = FALSE
+seed = []
