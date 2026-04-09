@@ -68,16 +68,16 @@ cross-field constraints
     def coordinates_valbefore(cls, v: List[str]) -> List[int]:
         """
         Parse and convert coordinate strings to integers before validation.
-    
+
         This validator runs before the main coordinate validation to ensure
         raw string input is converted to proper integer format.
-    
+
         Args:
             v: List of coordinate strings (e.g., ['0', '0'])
-    
+
         Returns:
             List of converted integer coordinates
-    
+
         Raises:
             ValueError: If coordinates contain non-integer values
         """
@@ -96,13 +96,13 @@ cross-field constraints
     def coordinates_validation(cls, v: tuple[int, int]) -> tuple[int, int]:
         """
         Validate that coordinates are non-negative.
-        
+
         Args:
             v: Tuple of (x, y) coordinates
-            
+
         Returns:
             The validated coordinate tuple
-            
+
         Raises:
             ValueError: If any coordinate is negative
         """
@@ -115,19 +115,20 @@ cross-field constraints
     def entry_exit_validation(self) -> 'ConfigValidate':
         """
         Perform cross-field validation after all individual field validations.
-        
+
         This validator checks relationships between multiple fields including:
         - Entry and exit coordinates are different
         - Coordinates are within maze bounds
         - Output file has correct extension
         - Output directory exists and is writable
         - Output file is writable if it already exists
-        
+
         Returns:
             The validated ConfigValidate instance
-            
+
         Raises:
-            ValueError: With all collected error messages if any validation fails
+            ValueError: With all collected error messages
+if any validation fails
         """
         errors = []
 
@@ -169,13 +170,13 @@ cross-field constraints
 class ConfigParser:
     """
     Parse and validate maze configuration from a text file.
-    
+
     This class handles reading a configuration file, parsing KEY=VALUE pairs,
     and validating the configuration using the ConfigValidate model.
-    
+
     Attributes:
         config: Validated configuration object (ConfigValidate instance)
-    
+
     Example:
         >>> parser = ConfigParser("config.txt")
         >>> config = parser.get_config()
@@ -185,10 +186,10 @@ class ConfigParser:
     def __init__(self, path: str) -> None:
         """
         Initialize ConfigParser and load configuration from file.
-        
+
         Args:
             path: Path to the configuration file
-            
+
         Raises:
             FileNotFoundError: If configuration file does not exist
             PermissionError: If file cannot be read due to permissions
@@ -199,19 +200,19 @@ class ConfigParser:
     def set_config(self, path: str) -> ConfigValidate:
         """
         Read and parse configuration file into validated model.
-        
+
         This method orchestrates the entire configuration loading process:
         1. Reads the file
         2. Filters comments and empty lines
         3. Parses KEY=VALUE pairs
         4. Validates and converts values
-        
+
         Args:
             path: Path to the configuration file
-            
+
         Returns:
             Validated ConfigValidate object
-            
+
         Raises:
             FileNotFoundError: If file doesn't exist
             PermissionError: If file can't be read
@@ -259,13 +260,13 @@ class ConfigParser:
     def config_key_lower(self, config: dict) -> ConfigValidate:
         """
         Convert configuration keys to lowercase and map 'exit' to 'exit_'.
-        
+
         Args:
             config: Dictionary with original case-sensitive keys
-            
+
         Returns:
             Validated ConfigValidate object
-            
+
         Raises:
             ValueError: If any mandatory key is missing
         """
@@ -288,20 +289,21 @@ class ConfigParser:
     def convert_values(self, config: dict) -> ConfigValidate:
         """
         Convert string values to appropriate Python types.
-        
+
         Handles conversions for:
         - Coordinates: "x,y" strings to tuple of ints
         - Perfect flag: "true"/"false" strings to boolean
         - Dimensions: String numbers to integers
-        
+
         Args:
             config: Dictionary with string values
-            
+
         Returns:
             Validated ConfigValidate object
-            
+
         Raises:
-            ValueError: For invalid coordinate format, boolean values, or integers
+            ValueError: For invalid coordinate format,
+boolean values, or integers
         """
         lst = ['entry', 'exit_']
         for key in config:
@@ -346,7 +348,7 @@ class ConfigParser:
     def get_config(self) -> ConfigValidate:
         """
         Return the validated configuration object.
-        
+
         Returns:
             ConfigValidate instance containing all configuration values
         """
@@ -355,7 +357,7 @@ class ConfigParser:
     def get_dict_config(self) -> dict[str, Any]:
         """
         Return configuration as a dictionary.
-        
+
         Returns:
             Dictionary representation of the validated configuration
         """
@@ -365,10 +367,10 @@ class ConfigParser:
 def main() -> None:
     """
     Main entry point for testing the configuration parser.
-    
+
     Reads 'config.txt' from current directory and prints the parsed
     configuration dictionary to stdout.
-    
+
     Example:
         $ python config_parser.py
         {'width': 20, 'height': 15, 'entry': (0, 0), ...}
@@ -378,6 +380,7 @@ def main() -> None:
         print(_.get_dict_config())
     except Exception as err:
         print(f"Error: {err}")
+
 
 if __name__ == "__main__":
     main()
