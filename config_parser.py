@@ -258,7 +258,7 @@ class ConfigParser:
                 raise ValueError("configs must be with one '='")
         return self.config_key_lower(config)
 
-    def config_key_lower(self, config: dict) -> ConfigValidate:
+    def config_key_lower(self, config: dict[str, str]) -> ConfigValidate:
         """
         Convert configuration keys to lowercase and map 'exit' to 'exit_'.
 
@@ -287,7 +287,7 @@ class ConfigParser:
                 raise ValueError(f"Missing mandatory config key: {man}")
         return self.convert_values(config_l)
 
-    def convert_values(self, config: dict) -> ConfigValidate:
+    def convert_values(self, config: dict[str, Any]) -> ConfigValidate:
         """
         Convert string values to appropriate Python types.
 

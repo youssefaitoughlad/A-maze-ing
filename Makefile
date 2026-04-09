@@ -1,10 +1,35 @@
+MAIN = a_maze_ing.py
+CONFIG = config.txt
 
-# Add to your Makefile
-test:
-	pytest tests/ -v --cov=config_parser --cov=mazegen
+.PHONY: install run debug clean lint lint-strict
 
-test-verbose:
-	pytest tests/ -v --tb=long --cov-report=html
+install:
+	poetry install
 
-test-quick:
-	pytest tests/ -v --maxfail=1
+
+run:
+	poetry run python3 $(MAIN) $(CONFIG)
+
+
+debug:
+	poetry run python3 -m pdb $(MAIN) $(CONFIG)
+
+
+Clean:
+	find . -type d -name "__pycache__" -exec rm -rf {} +
+	find . -type d -name ".mypy_cache" -exec rm -rf {} +
+	find . -name "*.pyc" -exec rm -rf {} +
+
+
+lint:
+	poetry run flake8 .
+	poetry run mypy . --war-return-any \
+		--warn-unused-ignores \
+		--ignore-missing-imports \
+		--disallow-untyped-defs \
+		--check-untyped-defs
+
+
+lint-strict:
+	poetry run flake8 .
+	poetry run mypy . --strict
