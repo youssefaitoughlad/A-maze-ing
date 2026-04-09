@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field, ValidationError
 from pydantic import model_validator, field_validator
 from typing import List, Tuple, Optional, Any
 import os
+import ast
 
 
 class ConfigValidate(BaseModel):
@@ -327,6 +328,15 @@ boolean values, or integers
                         f"perfect must be 'true' or 'false'"
                         f", i got {config[key]}"
                     )
+            if key == 'seed':
+                try:
+                    value = ast.literal_eval(config[key])
+                    if isinstance(
+                        value, (int, float, bool, str, bytes, bytearray)
+                    ):
+                        config[key] = value
+                except (ValueError, SyntaxError):
+                    pass
 
         int_keys = ['width', 'height']
         for key in int_keys:
