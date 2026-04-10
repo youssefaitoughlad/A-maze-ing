@@ -18,7 +18,8 @@ debug:
 Clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type d -name ".mypy_cache" -exec rm -rf {} +
-	:find . -name "*.pyc" -exec rm -rf {} +
+	find . -name "*.pyc" -exec rm -rf {} +
+	find . -name "maze.txt" -exec rm -rf {} +
 
 
 lint:
@@ -33,3 +34,9 @@ lint:
 lint-strict:
 	poetry run flake8 .
 	poetry run mypy . --strict
+
+
+build:
+	poetry build
+	mv dist/* .
+	rm -rf dist
