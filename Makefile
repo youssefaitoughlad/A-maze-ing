@@ -1,7 +1,7 @@
 MAIN = a_maze_ing.py
 CONFIG = config.txt
 
-.PHONY: install run debug clean lint lint-strict
+.PHONY: install run debug clean lint lint-strict build
 
 install:
 	poetry install

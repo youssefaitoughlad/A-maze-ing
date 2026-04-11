@@ -4,6 +4,10 @@ from os import system
 
 
 def type_writer(text: str, delay: float = 0.002) -> None:
+    """
+    Prints text character by character
+    with a typing animation effect.
+    """
     for char in text:
         print(char, end='', flush=True)
         time.sleep(delay)
@@ -29,6 +33,9 @@ goodby_banner: str = Path(
 
 
 def show_amazing_banner() -> None:
+    """
+    Displays the welcome banner with animated intro text.
+    """
     system("clear")
     for line in amazing_banner.split("\n"):
         type_writer(line)
@@ -37,6 +44,9 @@ def show_amazing_banner() -> None:
 
 
 def show_goodby_banner() -> None:
+    """
+    Displays the goodbye banner with typing animation.
+    """
     system('clear')
     for line in goodby_banner.split("\n"):
         type_writer(line)
