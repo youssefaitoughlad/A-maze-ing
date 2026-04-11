@@ -6,6 +6,10 @@ from collections import deque
 import random
 
 
+class MazeGenerator:
+    pass
+
+
 DIRECTIONS = {
     "N": (0, -1),
     "E": (1, 0),
@@ -205,3 +209,25 @@ def has_open_square(current_grid: List[List[Cell]]) -> bool:
                 return True
 
     return False
+
+def is_fully_closed(cell):
+    return all(cell.walls.values())
+
+
+def break_random_walls(grid):
+    for row in grid:
+        for cell in row:
+            if is_fully_closed(cell):
+                continue
+            for direction, (dx, dy) in DIRECTIONS.items():
+                nx, ny = cell.x + dx, cell.y + dy
+
+                if 0 <= nx < len(grid[0]) and 0 <= ny < len(grid):
+                    neighbor = grid[ny][nx]
+
+                    if is_fully_closed(neighbor):
+                        continue
+
+                    if cell.walls[direction] and random.random() < 0.1:
+                        remove_wall(cell, neighbor)
+

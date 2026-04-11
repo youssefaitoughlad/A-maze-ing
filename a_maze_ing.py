@@ -43,11 +43,9 @@ def amazing() -> None:
     generate_maze(grid)
     sp = shortest_path(grid, entry, exit_)
     cord = path_to_coordinate(sp, entry)
-    p = input("with path :")
-    if p == "1":
-        DrawMaze(grid,entry, exit_,True,cord, False)
-    else:
-        DrawMaze(grid,entry, exit_,True,[], False)
+    if perfect:
+        break_random_walls(grid)
+    DrawMaze(grid,entry, exit_,True,cord, False)
         
 def main() -> None:
     try:
