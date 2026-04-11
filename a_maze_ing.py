@@ -29,18 +29,18 @@ def get_dict_config(path: str) -> Dict[str, Any]:
 
 
 def amazing() -> None:
-    maze_info = get_dict_config("config.txt")
-    height = maze_info["height"]
-    width = maze_info["width"]
-    grid = create_grid(height, width)
+    maze_config = get_dict_config("config.txt")
+    height = maze_config.get("height")
+    width = maze_config.get("width")
+    entry = maze_config.get("entry")
+    exit_ = maze_config.get("exit_")
+    perfect = maze_config["perfect"]
+    seed = maze_config.get("seed", None)
+
+
+    grid = create_grid(9, 9)
+    reset_cells(grid)
     generate_maze(grid)
-    DrawMaze(
-        grid,
-        maze_info["entry"],
-        maze_info["exit_"],
-        is_reset_cell=True,
-        colored_maze=False
-    )
     
 
 def main() -> None:

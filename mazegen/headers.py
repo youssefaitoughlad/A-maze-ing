@@ -4,10 +4,6 @@ from os import system
 
 
 def type_writer(text: str, delay: float = 0.002) -> None:
-    """
-    Prints text character by character
-    with a typing animation effect.
-    """
     for char in text:
         print(char, end='', flush=True)
         time.sleep(delay)
@@ -31,11 +27,19 @@ goodby_banner: str = Path(
     "/home/yait-oug/Desktop/A-maze-inesh/goodby_banner.txt"
     ).read_text()
 
+amazing_menu: list[str] = [
+    "\n\033[93m === A-Maze-ing Menu ===\033[0m",
+    "",
+    "1- Regenerate New Maze",
+    "2- change Colors",
+    "3- Animate path Finding",
+    "4- Quit",
+    "",
+    "\033[93mEnter your choice [1 - 4] : \033[0m"
+]
+
 
 def show_amazing_banner() -> None:
-    """
-    Displays the welcome banner with animated intro text.
-    """
     system("clear")
     for line in amazing_banner.split("\n"):
         type_writer(line)
@@ -44,9 +48,19 @@ def show_amazing_banner() -> None:
 
 
 def show_goodby_banner() -> None:
-    """
-    Displays the goodbye banner with typing animation.
-    """
     system('clear')
     for line in goodby_banner.split("\n"):
         type_writer(line)
+
+def show_menu() -> str:
+    for item in amazing_menu[:-1]:
+        print(item)
+    return input(amazing_menu[-1])
+
+
+def get_valid_choice() -> str:
+    while True:
+        choice = show_menu().strip()
+        if choice in ("1", "2", "3", "4"):
+            return choice
+        print("Invalid choice. Please enter a number between 1 and 4.")
