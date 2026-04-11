@@ -38,11 +38,17 @@ def amazing() -> None:
     seed = maze_config.get("seed", None)
 
 
-    grid = create_grid(9, 9)
+    grid = create_grid(height, width)
     reset_cells(grid)
     generate_maze(grid)
-    
-
+    sp = shortest_path(grid, entry, exit_)
+    cord = path_to_coordinate(sp, entry)
+    p = input("with path :")
+    if p == "1":
+        DrawMaze(grid,entry, exit_,True,cord, False)
+    else:
+        DrawMaze(grid,entry, exit_,True,[], False)
+        
 def main() -> None:
     try:
         amazing()

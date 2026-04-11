@@ -6,6 +6,13 @@ from collections import deque
 import random
 
 
+DIRECTIONS = {
+    "N": (0, -1),
+    "E": (1, 0),
+    "S": (0, 1),
+    "W": (-1, 0)
+}
+
 def create_grid(
         height: int,
         width: int
@@ -66,9 +73,22 @@ def get_unvisited_neighbor(
 
     return unvisited_neighbors
 
-def reconstruct_path(parent, entry, exit):
+def path_to_coordinate(path, entry):
+    coordinates = []
+    cell_x, cell_y = entry
+    
+    for direction in path:
+        dx, dy= DIRECTIONS[direction]
+        cell_x += dx
+        cell_y += dy
+
+        coordinates.append((cell_x, cell_y))
+    return coordinates
+
+
+def reconstruct_path(parent, entry, exit_):
     path = []
-    current = exit
+    current = exit_
 
     while current != entry:
         prev, direction = parent[current]
@@ -79,17 +99,17 @@ def reconstruct_path(parent, entry, exit):
     return path
 
 
-def shortest_path(current_grid, entry, exit):
-    parent = bfs(current_grid, entry, exit)
+def shortest_path(current_grid, entry, exit_):
+    parent = bfs(current_grid, entry, exit_)
 
     if parent is None:
         return []
 
-    return reconstruct_path(parent, entry, exit)
+    return reconstruct_path(parent, entry, exit_)
 
 
 def can_move(grid, x, y, direction):
-    cell: Cell = grid[x][y]
+    cell: Cell = grid[y][x]
 
     if cell.walls[direction]:
         return False
@@ -102,12 +122,6 @@ def bfs(
         exit
         ) -> None:
 
-    DIRECTIONS = {
-        "N": (0, -1),
-        "E": (1, 0),
-        "S": (0, 1),
-        "W": (-1, 0)
-    }
     queue = deque()
     visited = set()
     parent = {}

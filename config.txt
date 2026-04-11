@@ -1,7 +1,7 @@
-WIDTH=9
-HEIGHT=9
-ENTRY=3, 7
-exit=8, 3
-OUTPUT_FILE=mazesal;;lkas;lk;kkl;ksal;kslaksal;k;ls;lka;lks;lal;sa;lk.txt
+WIDTH=12
+HEIGHT=12
+ENTRY=0,0
+exit=11,11
+OUTPUT_FILE=maze.txt
 PERFECT = false
 seed = False
