@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, ValidationError
 from pydantic import model_validator, field_validator
 from typing import List, Tuple, Optional, Any, Dict
+from mazegen._42_cells import _42cells
 import os
 import ast
 
@@ -163,6 +164,12 @@ if any validation fails
             if not os.access(current_path, os.W_OK):
                 errors.append(f"Cannot write to file: {self.output_file}")
 
+        _42_pattern = _42cells(self.width, self.height)
+        if self.entry in _42_pattern:
+            errors.append("Entry coordinates touched the 42 pattern")
+        if self.exit_ in _42_pattern:
+            errors.append("Exit coordinates touched the 42 pattern")
+
         if errors:
             raise ValueError("\n".join(errors))
         return self
@@ -311,6 +318,7 @@ boolean values, or integers
             if key in lst:
                 if ',' not in config[key]:
                     raise ValueError(f"',' missed in {key}")
+                config[key] = config.get(key).strip("()")
                 items = config[key].split(',')
                 if len(items) != 2:
                     raise ValueError(
@@ -386,10 +394,11 @@ def main() -> None:
         {'width': 20, 'height': 15, 'entry': (0, 0), ...}
     """
     try:
-        _ = ConfigParser("config.txt")
+        _ = ConfigParser("./config.txt")
         print(_.get_dict_config())
     except Exception as err:
-        print(f"Error: {err}") 
+        print(type(err))
+        print(f"Error: {str(err).strip('Value error, ')}") 
 
 
 if __name__ == "__main__":
