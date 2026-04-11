@@ -37,16 +37,41 @@ def amazing() -> None:
     perfect = maze_config["perfect"]
     seed = maze_config.get("seed", None)
 
+    maze = MazeGenerator(
+        height,
+        width,
+        entry,
+        exit_,
+        "maze.txt",
+        seed,
+        perfect
+        )
+    maze.generate_maze()
+    path = maze.shortest_path()
+    cord = maze.path_to_coordinate(path)
+    DrawMaze(maze.grid, entry, exit_, True, cord, False)
+    choice = show_menu()
+    while True:
+        match choice:
+            case "1":
+                system('clear')
+                maze = MazeGenerator(
+                height,
+                width,
+                entry,
+                exit_,
+                "maze.txt",
+                seed,
+                perfect
+                )
+                maze.generate_maze()
+                path = maze.shortest_path()
+                cord = maze.path_to_coordinate(path)
+                DrawMaze(maze.grid, entry, exit_, True, [], True)
+                choice = show_menu()
+            case "2":
+                ...
 
-    grid = create_grid(height, width)
-    reset_cells(grid)
-    generate_maze(grid)
-    sp = shortest_path(grid, entry, exit_)
-    cord = path_to_coordinate(sp, entry)
-    if perfect:
-        break_random_walls(grid)
-    DrawMaze(grid,entry, exit_,True,cord, False)
-        
 def main() -> None:
     try:
         amazing()

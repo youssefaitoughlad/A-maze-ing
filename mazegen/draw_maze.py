@@ -26,7 +26,6 @@ class Colors(Enum):
     WHITE = "\033[89m"
     RED = "\033[91m"
     GREEN = "\033[92m"
-    YELLOW = "\033[93m"
     BLUE = "\033[94m"
     MAGENTA = "\033[95m"
     CYAN = "\033[96m"
@@ -165,7 +164,7 @@ the "42" pattern background.
                     middle_line += " 🍼" + self.front_color.value
                     middle_line += " " + self.front_color.value
                 elif (y, colums) in self.path and i == 1 and (y, colums) != self.entry:
-                    middle_line += " *  " + self.front_color.value   
+                    middle_line += "\033[95m" + " *  " + "\033[0m" + self.front_color.value 
                 else:
                     middle_line += "    " + self.front_color.value
 
@@ -207,9 +206,6 @@ the "42" pattern background.
         """
         from time import sleep
         for colums in range(self.heigth):
-            sleep(0.02)
             self.draw_top_line(colums)
-            sleep(0.02)
             self.draw_midlle_line(colums)
-            sleep(0.02)
         self.draw_bottom_line()

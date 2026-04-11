@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple, Union
+from typing import List, Dict, Tuple, Union, Any, Optional
 from mazegen.draw_maze import DrawMaze
 from mazegen._42_cells import reset_cells
 from mazegen._cell import Cell
@@ -6,228 +6,227 @@ from collections import deque
 import random
 
 
-class MazeGenerator:
-    pass
-
-
-DIRECTIONS = {
-    "N": (0, -1),
-    "E": (1, 0),
-    "S": (0, 1),
-    "W": (-1, 0)
-}
-
-def create_grid(
+class MazeGenerator():
+    DIRECTIONS = {
+        "N": (0, -1),
+        "E": (1, 0),
+        "S": (0, 1),
+        "W": (-1, 0)
+    }
+    def __init__(
+        self,
         height: int,
-        width: int
-        ) -> List[List[Cell]]:
-    return [[Cell(x, y) for x in range(width)] for y in range(height)]
+        width: int,
+        entry: Tuple[int, int],
+        exit_: Tuple[int, int],
+        output_file: str,
+        seed: Any,
+        perfect: bool = True,
+    ) -> None:
+        self.height: int = height
+        self.width: int = width
+        self.entry: Tuple[int, int] = entry
+        self.exit: Tuple[int, int] = exit_
+        self.perfect: bool = perfect
+        self.output_file: str = output_file
+        self.seed: Any = seed
+        self.grid = self.create_grid()
+        
+
+    def create_grid(self) -> List[List[Cell]]:
+        return [
+            [Cell(x, y) for x in range(self.width)] for y in range(self.height)
+            ]
 
 
-def get_neighbors(
-        current_cell: Cell,
-        current_grid: List[List[Cell]]
+    def get_neighbors(self, current_cell: Cell) -> Dict[str, Cell]:
+        neighbors: Dict[str, Cell] = {}
+        height: int = len(self.grid) - 1
+        width: int = len(self.grid[0]) - 1
+
+        cell_x, cell_y = current_cell.x, current_cell.y
+        if cell_y > 0:
+            neighbors["N"] = self.grid[cell_y - 1][cell_x]
+        if cell_x < width:
+            neighbors["E"] = self.grid[cell_y][cell_x + 1]
+        if cell_y < height:
+            neighbors["S"] = self.grid[cell_y + 1][cell_x]
+        if cell_x > 0:
+            neighbors["W"] = self.grid[cell_y][cell_x - 1]
+
+        return neighbors
+
+
+    def remove_wall(self, cell: Cell, neighbor: Cell) -> None:
+        dx = neighbor.x - cell.x
+        dy = neighbor.y - cell.y
+
+        if dx == 1:
+            cell.walls["E"] = False
+            neighbor.walls["W"] = False
+        elif dx == -1:
+            cell.walls["W"] = False
+            neighbor.walls["E"] = False
+        elif dy == 1:
+            cell.walls["S"] = False
+            neighbor.walls["N"] = False
+        elif dy == -1:
+            cell.walls["N"] = False
+            neighbor.walls["S"] = False
+
+
+    def get_unvisited_neighbors(
+        self, current_cell: Cell
         ) -> Dict[str, Cell]:
-    neighbors: Dict[str, Cell] = {}
-    height: int = len(current_grid) - 1
-    width: int = len(current_grid[0]) - 1
+        neighbors = self.get_neighbors(current_cell)
 
-    cell_x, cell_y = current_cell.x, current_cell.y
-    if cell_y > 0:
-        neighbors["N"] = current_grid[cell_y - 1][cell_x]
-    if cell_x < width:
-        neighbors["E"] = current_grid[cell_y][cell_x + 1]
-    if cell_y < height:
-        neighbors["S"] = current_grid[cell_y + 1][cell_x]
-    if cell_x > 0:
-        neighbors["W"] = current_grid[cell_y][cell_x - 1]
+        unvisited_neighbors: Dict[str, Cell] = {}
 
-    return neighbors
+        for direction, neighbor in neighbors.items():
+            if not neighbor.visited:
+                unvisited_neighbors[direction] = neighbor
 
+        return unvisited_neighbors
 
-def remove_wall(cell: Cell, neighbor: Cell) -> None:
-    dx = neighbor.x - cell.x
-    dy = neighbor.y - cell.y
+    def path_to_coordinate(self, path: List[str]) -> List[Tuple[int, int]]:
+        coordinates: List[Tuple[int, int]] = []
+        cell_x, cell_y = self.entry
 
-    if dx == 1:
-        cell.walls["E"] = False
-        neighbor.walls["W"] = False
-    elif dx == -1:
-        cell.walls["W"] = False
-        neighbor.walls["E"] = False
-    elif dy == 1:
-        cell.walls["S"] = False
-        neighbor.walls["N"] = False
-    elif dy == -1:
-        cell.walls["N"] = False
-        neighbor.walls["S"] = False
+        for direction in path:
+            dx, dy = self.DIRECTIONS[direction]
+            cell_x += dx
+            cell_y += dy
+            coordinates.append((cell_x, cell_y))
+
+        return coordinates
 
 
-def get_unvisited_neighbor(
-        current_cell: Cell,
-        current_grid: List[List[Cell]]
-        )-> Dict[str, Cell]:
-    neighbors = get_neighbors(current_cell, current_grid)
+    def reconstruct_path(
+        self, parent: Dict[Tuple[int, int], Tuple[Tuple[int, int], str]]
+        ) -> List[str]:
+        path: List[str] = []
+        current: Tuple[int, int] = self.exit
 
-    unvisited_neighbors = {}
+        while current != self.entry:
+            prev, direction = parent[current]
+            path.append(direction)
+            current = prev
 
-    for direction, neighbor in neighbors.items():
-        if not neighbor.visited:
-            unvisited_neighbors[direction] = neighbor
-
-    return unvisited_neighbors
-
-def path_to_coordinate(path, entry):
-    coordinates = []
-    cell_x, cell_y = entry
-    
-    for direction in path:
-        dx, dy= DIRECTIONS[direction]
-        cell_x += dx
-        cell_y += dy
-
-        coordinates.append((cell_x, cell_y))
-    return coordinates
+        path.reverse()
+        return path
 
 
-def reconstruct_path(parent, entry, exit_):
-    path = []
-    current = exit_
+    def shortest_path(self) -> List[str]:
+        parent: Optional[Dict[Tuple[int, int], Tuple[Tuple[int, int], str]]] = self.bfs()
 
-    while current != entry:
-        prev, direction = parent[current]
-        path.append(direction)
-        current = prev
+        if parent is None:
+            return []
 
-    path.reverse()
-    return path
+        return self.reconstruct_path(parent)
 
 
-def shortest_path(current_grid, entry, exit_):
-    parent = bfs(current_grid, entry, exit_)
-
-    if parent is None:
-        return []
-
-    return reconstruct_path(parent, entry, exit_)
+    def can_move(self, x: int, y: int, direction: str) -> bool:
+        cell: Cell = self.grid[y][x]
+        return not cell.walls[direction]
 
 
-def can_move(grid, x, y, direction):
-    cell: Cell = grid[y][x]
+    def bfs(self) -> Optional[Dict[Tuple[int, int], Tuple[Tuple[int, int], str]]]:
+        queue: deque = deque()
+        visited: set = set()
+        parent: Dict[Tuple[int, int], Tuple[Tuple[int, int], str]] = {}
 
-    if cell.walls[direction]:
+        queue.append(self.entry)
+        visited.add(self.entry)
+
+        while queue:
+            cell_x, cell_y = queue.popleft()
+
+            if (cell_x, cell_y) == self.exit:
+                return parent
+
+            for direction in self.DIRECTIONS:
+                if self.can_move(cell_x, cell_y, direction):
+                    dx, dy = self.DIRECTIONS[direction]
+                    nx, ny = dx + cell_x, dy + cell_y
+
+                    if (nx, ny) not in visited:
+                        visited.add((nx, ny))
+                        parent[(nx, ny)] = ((cell_x, cell_y), direction)
+                        queue.append((nx, ny))
+
+        return None      
+
+
+    def dfs(self, current_cell: Cell) -> Optional[Cell]:
+        current_cell.visited = True
+        unvisited_neighbors: Dict[str, Cell] = self.get_unvisited_neighbors(current_cell)
+
+        if not unvisited_neighbors:
+            return None
+
+        neighbor: Cell = random.choice(list(unvisited_neighbors.values()))
+        self.remove_wall(current_cell, neighbor)
+        neighbor.visited = True
+
+        return neighbor
+
+    def generate_maze(self) -> None:
+        reset_cells(self.grid)
+        start: Cell = self.grid[0][0]
+        stack: List[Cell] = [start]
+        while stack:
+            current_cell: Cell = stack[-1]
+            next_cell: Optional[Cell] = self.dfs(current_cell)
+
+            if next_cell:
+                stack.append(next_cell)
+            else:
+                stack.pop()
+        
+        if not self.perfect:
+            self.break_random_walls()
+
+    def is_open_square(self, x: int, y: int) -> bool:
+        for dy in range(3):
+            for dx in range(3):
+                current_cell: Cell = self.grid[dy + y][dx + x]
+
+                if (
+                    dx < 2 and current_cell.walls["E"]
+                    or dy < 2 and current_cell.walls["S"]
+                ):
+                    return False
+        return True
+
+    def has_open_square(self) -> bool:
+        height: int = len(self.grid)
+        width: int = len(self.grid[0])
+
+        for y in range(height - 2):
+            for x in range(width - 2):
+                if self.is_open_square(x, y):
+                    return True
+
         return False
-    return True
+
+    def is_fully_closed(self, cell: Cell) -> bool:
+        return all(cell.walls.values())
 
 
-def bfs(
-        current_grid: list[list[Cell]],
-        entry,
-        exit
-        ) -> None:
+    def break_random_walls(self) -> None:
+        for row in self.grid:
+            for cell in row:
+                if self.is_fully_closed(cell):
+                    continue
+                for direction, (dx, dy) in self.DIRECTIONS.items():
+                    nx, ny = cell.x + dx, cell.y + dy
 
-    queue = deque()
-    visited = set()
-    parent = {}
+                    if 0 <= nx < len(self.grid[0]) and 0 <= ny < len(self.grid):
+                        neighbor: Cell = self.grid[ny][nx]
 
-    queue.append(entry)
-    visited.add(entry)
+                        if self.is_fully_closed(neighbor):
+                            continue
 
-    while queue:
-        cell_x, cell_y = queue.popleft()
-
-        if (cell_x, cell_y) == exit:
-            return parent
-
-        for direction in DIRECTIONS:
-            if can_move(current_grid, cell_x, cell_y, direction):
-                dx, dy = DIRECTIONS[direction]
-                nx, ny = dx + cell_x, dy + cell_y
-
-                if (nx, ny) not in visited:
-                    visited.add((nx, ny))
-                    parent[(nx, ny)] = ((cell_x, cell_y), direction)
-                    queue.append((nx, ny))
-
-    return None       
-
-
-def dfs(
-        current_cell: Cell, current_grid: list[list[Cell]]
-        ) -> Union[Cell, None]:
-    current_cell.visited = True
-    unvisited_neighbor = get_unvisited_neighbor(current_cell, current_grid)
-
-    if not unvisited_neighbor:
-        return None
-
-    neighbor: Cell = random.choice(list(unvisited_neighbor.values()))
-    remove_wall(current_cell, neighbor)
-    neighbor.visited = True
-    
-    return neighbor
-
-
-def generate_maze(current_grid: List[List[Cell]]) -> None:
-    start: Cell = current_grid[0][0]
-    stack: List[Cell] = [start]
-
-    while stack:
-        current_cell = stack[-1]
-        next_cell = dfs(current_cell, current_grid)
-
-        if next_cell:
-            stack.append(next_cell)
-        else:
-            stack.pop()
-
-
-def is_open_square(
-        current_grid: List[List[Cell]],
-        x: int,
-        y: int
-        ) -> bool:
-    for dy in range(3):
-        for dx in range(3):
-            current_cell = current_grid[dy + y][dx + x]
-
-            if (
-                dx < 2 and current_cell.walls["E"]
-                or  dy < 2 and current_cell.walls["N"]
-            ):
-                return False
-    return True
-
-
-def has_open_square(current_grid: List[List[Cell]]) -> bool:
-    heigth: int = len(current_grid)
-    width: int = len(current_grid[0])
-
-    for y in range(heigth - 2):
-        for x in range(width - 2):
-            if is_open_square(current_grid, x, y):
-                return True
-
-    return False
-
-def is_fully_closed(cell):
-    return all(cell.walls.values())
-
-
-def break_random_walls(grid):
-    for row in grid:
-        for cell in row:
-            if is_fully_closed(cell):
-                continue
-            for direction, (dx, dy) in DIRECTIONS.items():
-                nx, ny = cell.x + dx, cell.y + dy
-
-                if 0 <= nx < len(grid[0]) and 0 <= ny < len(grid):
-                    neighbor = grid[ny][nx]
-
-                    if is_fully_closed(neighbor):
-                        continue
-
-                    if cell.walls[direction] and random.random() < 0.1:
-                        remove_wall(cell, neighbor)
+                        if cell.walls[direction] and random.random() < 0.1:
+                            self.remove_wall(cell, neighbor)
 
