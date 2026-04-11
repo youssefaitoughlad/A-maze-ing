@@ -10,7 +10,9 @@ def type_writer(text: str, delay: float = 0.002) -> None:
     print()
 
 
-amazing_banner: str = Path("amazing_banner.txt").read_text()
+amazing_banner: str = Path(
+    "/home/yait-oug/Desktop/A-maze-inesh/amazing_banner.txt"
+    ).read_text()
 
 intro_lines: list[str] = [
     "Welcome to the AMAZING PROJECT!",
@@ -21,7 +23,9 @@ intro_lines: list[str] = [
     "READY 🚀",
 ]
 
-goodby_banner: str = Path("goodby_banner.txt").read_text()
+goodby_banner: str = Path(
+    "/home/yait-oug/Desktop/A-maze-inesh/goodby_banner.txt"
+    ).read_text()
 
 
 def show_amazing_banner() -> None:
@@ -36,4 +40,3 @@ def show_goodby_banner() -> None:
     system('clear')
     for line in goodby_banner.split("\n"):
         type_writer(line)
-

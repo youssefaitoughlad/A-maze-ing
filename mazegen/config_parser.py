@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, ValidationError
 from pydantic import model_validator, field_validator
-from typing import List, Tuple, Optional, Any
+from typing import List, Tuple, Optional, Any, Dict
 import os
 import ast
 
@@ -287,7 +287,7 @@ class ConfigParser:
                 raise ValueError(f"Missing mandatory config key: {man}")
         return self.convert_values(config_l)
 
-    def convert_values(self, config: dict[str, Any]) -> ConfigValidate:
+    def convert_values(self, config: Dict[str, Any]) -> ConfigValidate:
         """
         Convert string values to appropriate Python types.
 
@@ -390,8 +390,6 @@ def main() -> None:
         print(_.get_dict_config())
     except Exception as err:
         print(f"Error: {err}") 
-
-        iiiii
 
 
 if __name__ == "__main__":
