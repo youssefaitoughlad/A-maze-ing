@@ -38,7 +38,7 @@ cross-field constraints
     exit_: Tuple[int, int] = Field(...)
     perfect: bool = False
     output_file: str = Field(..., min_length=1, max_length=50)
-    seed: Optional[Any] = Field(default=8)
+    seed: Optional[Any] = Field(default=None)
 
     @field_validator('width', 'height')
     @classmethod

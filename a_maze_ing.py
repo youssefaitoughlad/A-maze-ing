@@ -2,9 +2,21 @@ from mazegen.draw_maze import *
 from mazegen.generate_maze import *
 from mazegen.config_parser import *
 from mazegen.headers import *
+from enum import Enum
 from typing import Dict, Any
 from os import system
 import time
+
+
+class Amazing():
+    pass
+
+
+class MenuChoice(Enum):
+    GENERATE = "1"
+    COLORS = "2"
+    ANIMATE = "3"
+    QUIT = "5"
 
 
 def get_dict_config(path: str) -> Dict[str, Any]:
@@ -28,9 +40,9 @@ def get_dict_config(path: str) -> Dict[str, Any]:
     return parser.get_dict_config()
 
 
-def show_maze(maze, entry, exit_, path=None, animate=False):
+def show_maze(maze, entry, exit_, is_reset_call ,path=None, animate=False):
     cord = maze.path_to_coordinate(path) if path else []
-    DrawMaze(maze.grid, entry, exit_, True, cord, animate)
+    DrawMaze(maze.grid, entry, exit_, is_reset_call, cord, animate)
 
 
 def build_maze(height, width, entry, exit_, seed, perfect):
@@ -46,41 +58,44 @@ def amazing() -> None:
     width   = maze_config.get("width")
     entry   = maze_config.get("entry")
     exit_   = maze_config.get("exit_")
-    perfect = maze_config["perfect"]
-    seed    = maze_config.get("seed", None)
+    perfect = maze_config.get("perfect")
+    seed    = maze_config.get("seed")
 
+    
+    # show_amazing_banner()
+    system('clear')
     maze, path = build_maze(height, width, entry, exit_, seed, perfect)
-    show_maze(maze, entry, exit_, path)
+    show_maze(maze, entry, exit_, True, [])
     choice = show_menu()
-
-    is_visible = True
+    path_visible = True
+    animate = False
     while True:
+        system('clear')
         match choice:
-            case "1":
+            case MenuChoice.GENERATE.value:
                 maze, path = build_maze(height, width, entry, exit_, seed, perfect)
+                show_maze(maze, entry, exit_, True, [])
+            case MenuChoice.COLORS.value:
                 system('clear')
-                show_maze(maze, entry, exit_, path)
-                choice = show_menu()
-
-            case "2":
+                animate = True
+                show_maze(maze, entry, exit_, True, [], animate)
+            case MenuChoice.ANIMATE.value:
                 system('clear')
-                show_maze(maze, entry, exit_, path, animate=True)
-                choice = show_menu()
-            case "3":
-                system('clear')
-                if is_visible:
-                    show_maze(maze, entry, exit_, [])
-                    is_visible = False
+                if path_visible:
+                    show_maze(maze, entry, exit_, True, path, animate)
                 else:
-                    show_maze(maze, entry, exit_, path)
-                    is_visible = True
-                choice = show_menu()
-
-            case "4":
+                    show_maze(maze, entry, exit_, True, [], animate)
+                path_visible = not path_visible
+            case MenuChoice.QUIT.value:
                 system('clear')
+                show_goodby_banner()
                 break
             case _:
-                choice = show_menu()
+                system('clear')
+                raise ValueError(
+                    "Invalid choice "
+                )
+        choice = show_menu()
 
 def main() -> None:
     try:
@@ -92,3 +107,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

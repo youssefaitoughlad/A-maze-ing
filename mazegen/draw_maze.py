@@ -74,16 +74,16 @@ the "42" pattern cells
             self,
             grid: List[List[Cell]],
             entry: Tuple[int, int],
-            exit: Tuple[int, int],
+            exit_: Tuple[int, int],
             is_reset_cell: bool,
             path: List[str],
             colored_maze: bool = True
     ) -> None:
         self.grid: List[List[Cell]] = grid
         self.entry: Tuple[int, int] = entry
-        self.exit: Tuple[int, int] = exit
+        self.exit: Tuple[int, int] = exit_
         self.is_reset_cell: bool = is_reset_cell
-        self.path = path
+        self.path: List[str] = path
         self.colored_maze: bool = colored_maze
         self.width: int = len(grid[0])
         self.heigth: int = len(grid)

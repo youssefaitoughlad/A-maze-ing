@@ -29,9 +29,9 @@ class MazeGenerator():
         self.exit: Tuple[int, int] = exit_
         self.perfect: bool = perfect
         self.output_file: str = output_file
-        self.seed: Any = seed
         self.grid = self.create_grid()
-        
+        if seed:
+            random.seed(seed)
 
     def create_grid(self) -> List[List[Cell]]:
         return [

@@ -29,13 +29,11 @@ goodby_banner: str = Path(
 
 amazing_menu: list[str] = [
     "\n\033[93m === A-Maze-ing Menu ===\033[0m",
-    "",
     "1- Regenerate New Maze",
-    "2- change Colors",
+    "2- Change Colors",
     "3- Animate path Finding",
     "4- Quit",
-    "",
-    "\033[93mEnter your choice [1 - 4] : \033[0m"
+    "\033[93mEnter your choice (1-5) : \033[0m"
 ]
 
 
@@ -44,7 +42,7 @@ def show_amazing_banner() -> None:
     for line in amazing_banner.split("\n"):
         type_writer(line)
     for line in intro_lines:
-        type_writer(line, 0.03)
+        type_writer(line, 0.02)
 
 
 def show_goodby_banner() -> None:
