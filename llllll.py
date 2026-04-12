@@ -11,8 +11,7 @@ class MenuChoice(Enum):
     GENERATE   = "1"
     COLORS     = "2"
     ANIMATE    = "3"
-    DISABLE_42 = "4"
-    QUIT       = "5"
+    QUIT       = "4"
 
 
 class Amazing:
@@ -24,6 +23,7 @@ class Amazing:
         self.exit_     = config.get("exit_")
         self.perfect   = config.get("perfect")
         self.seed      = config.get("seed")
+        self.config_path: str = config_path
         self.maze      = None
         self.path      = None
         self.animate   = False
@@ -50,7 +50,7 @@ class Amazing:
     def _build_maze(self):
         self.maze = MazeGenerator(
             self.height, self.width, self.entry,
-            self.exit_, "maze.txt", self.seed, self.perfect
+            self.exit_, self.config_path, self.seed, self.perfect
         )
         self.maze.generate_maze()
         self.path = self.maze.shortest_path()
@@ -68,6 +68,7 @@ class Amazing:
         self._show_maze(is_reset=True, show_path=self.path_visible)
 
     def _handle_animate(self):
+        random.seed(10)
         self.path_visible = not self.path_visible
         self._show_maze(is_reset=True, show_path=self.path_visible)
 
@@ -87,8 +88,6 @@ class Amazing:
                     self._handle_colors()
                 case MenuChoice.ANIMATE.value:
                     self._handle_animate()
-                case MenuChoice.DISABLE_42.value:
-                    self._handle_disable_42()
                 case MenuChoice.QUIT.value:
                     show_goodby_banner()
                     break

@@ -33,7 +33,7 @@ amazing_menu: list[str] = [
     "2- Change Colors",
     "3- Animate path Finding",
     "4- Quit",
-    "\033[93mEnter your choice (1-5) : \033[0m"
+    "\033[93mEnter your choice (1-4) : \033[0m"
 ]
 
 
