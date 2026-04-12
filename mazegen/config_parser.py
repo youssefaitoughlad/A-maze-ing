@@ -399,7 +399,6 @@ def main() -> None:
         _ = ConfigParser("./config.txt")
         print(_.get_dict_config())
     except Exception as err:
-        print(type(err))
         print(f"Error: {str(err).strip('Value error, ')}")
 
 

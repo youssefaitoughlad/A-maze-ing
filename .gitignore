@@ -3,4 +3,4 @@ __pycache__
 .venv/
 poetry.lock
 .vscode/
-gitpsh.sh
+*.sh

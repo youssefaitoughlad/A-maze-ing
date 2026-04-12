@@ -32,3 +32,17 @@ class Cell:
             "S": True,
             "W": True
         }
+
+    def __repr__(self) -> str:
+        """
+        Provide a developer-friendly string representation of the cell.
+
+        Returns a string showing the cell coordinates and which walls
+        are currently closed, useful for debugging and inspection during
+        development. The format is concise yet informative, listing only
+        closed walls to reduce visual clutter.
+        """
+        walls_str = "".join(
+            d for d, closed in self.walls.items() if closed
+        )
+        return f"Cell({self.x}, {self.y}) walls=[{walls_str}]"
