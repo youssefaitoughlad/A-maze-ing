@@ -1,35 +1,35 @@
 from mazegen._42_cells import _42cells
 from mazegen._cell import Cell
-from enum import Enum
+from mazegen.colors import *
 import random
 from typing import List, Tuple
 
 
-class BackGroundColor(Enum):
-    """
-    ANSI color codes for terminal background colors
-    used in maze visualization.
-    """
-    BG_RED = "\033[41m"
-    BG_GREEN = "\033[42m"
-    BG_YELLOW = "\033[43m"
-    BG_BLUE = "\033[44m"
-    BG_CYAN = "\033[46m"
-    BG_WHITE = "\033[47m"
+# class BackGroundColor(Enum):
+#     """
+#     ANSI color codes for terminal background colors
+#     used in maze visualization.
+#     """
+#     BG_RED = "\033[41m"
+#     BG_GREEN = "\033[42m"
+#     BG_YELLOW = "\033[43m"
+#     BG_BLUE = "\033[44m"
+#     BG_CYAN = "\033[46m"
+#     BG_WHITE = "\033[47m"
 
 
-class Colors(Enum):
-    """
-    ANSI color codes for terminal foreground colors
-    used in maze visualization.
-    """
-    WHITE = "\033[89m"
-    RED = "\033[91m"
-    GREEN = "\033[92m"
-    BLUE = "\033[94m"
-    MAGENTA = "\033[95m"
-    CYAN = "\033[96m"
-    RESET = "\033[0m"
+# class Colors(Enum):
+#     """
+#     ANSI color codes for terminal foreground colors
+#     used in maze visualization.
+#     """
+#     WHITE = "\033[89m"
+#     RED = "\033[91m"
+#     GREEN = "\033[92m"
+#     BLUE = "\033[94m"
+#     MAGENTA = "\033[95m"
+#     CYAN = "\033[96m"
+#     RESET = "\033[0m"
 
 
 class DrawMaze():
@@ -77,6 +77,8 @@ the "42" pattern cells
             exit_: Tuple[int, int],
             is_reset_cell: bool,
             path: List[str],
+            front_color: Colors,
+            back_color: BackGroundColor,
             colored_maze: bool = True
     ) -> None:
         self.grid: List[List[Cell]] = grid
@@ -87,27 +89,10 @@ the "42" pattern cells
         self.colored_maze: bool = colored_maze
         self.width: int = len(grid[0])
         self.heigth: int = len(grid)
-        self.front_color: Colors = self.get_front_color()
-        self.back_color: BackGroundColor = self.get_back_color()
+        self.front_color: Colors = front_color
+        self.back_color: BackGroundColor = back_color
         self.draw_maze()
 
-    def get_front_color(self) -> Colors:
-        """
-        Returns a random foreground color or white
-        if colored mode is disabled.
-        """
-        if not self.colored_maze:
-            return Colors.WHITE
-        colors: List[Colors] = [c for c in Colors if c != Colors.RESET]
-        return random.choice(colors)
-
-    def get_back_color(self) -> BackGroundColor:
-        """
-        Returns a random background color
-        for highlighting the '42' pattern.
-        """
-        colors: List[BackGroundColor] = [c for c in BackGroundColor]
-        return random.choice(colors)
 
     def show_maze_with_colors(self, text: str) -> None:
         """

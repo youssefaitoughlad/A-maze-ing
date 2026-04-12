@@ -1,5 +1,5 @@
 from typing import List, Dict, Tuple, Union, Any, Optional
-from mazegen.draw_maze import DrawMaze
+from mazegen.colors import *
 from mazegen._42_cells import reset_cells
 from mazegen._cell import Cell
 from collections import deque
@@ -30,6 +30,7 @@ class MazeGenerator():
         self.perfect: bool = perfect
         self.output_file: str = output_file
         self.grid = self.create_grid()
+
         if seed:
             random.seed(seed)
 
@@ -185,6 +186,7 @@ class MazeGenerator():
         
         if not self.perfect:
             self.break_random_walls()
+        
 
     def is_open_square(self, x: int, y: int) -> bool:
         for dy in range(3):
