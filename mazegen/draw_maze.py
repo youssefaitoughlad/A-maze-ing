@@ -1,35 +1,7 @@
 from mazegen._42_cells import _42cells
 from mazegen._cell import Cell
-from mazegen.colors import *
-import random
+from mazegen.colors import Colors, BackGroundColor
 from typing import List, Tuple
-
-
-# class BackGroundColor(Enum):
-#     """
-#     ANSI color codes for terminal background colors
-#     used in maze visualization.
-#     """
-#     BG_RED = "\033[41m"
-#     BG_GREEN = "\033[42m"
-#     BG_YELLOW = "\033[43m"
-#     BG_BLUE = "\033[44m"
-#     BG_CYAN = "\033[46m"
-#     BG_WHITE = "\033[47m"
-
-
-# class Colors(Enum):
-#     """
-#     ANSI color codes for terminal foreground colors
-#     used in maze visualization.
-#     """
-#     WHITE = "\033[89m"
-#     RED = "\033[91m"
-#     GREEN = "\033[92m"
-#     BLUE = "\033[94m"
-#     MAGENTA = "\033[95m"
-#     CYAN = "\033[96m"
-#     RESET = "\033[0m"
 
 
 class DrawMaze():
@@ -76,7 +48,7 @@ the "42" pattern cells
             entry: Tuple[int, int],
             exit_: Tuple[int, int],
             is_reset_cell: bool,
-            path: List[str],
+            path: List[tuple[int, int]],
             front_color: Colors,
             back_color: BackGroundColor,
             colored_maze: bool = True
@@ -85,14 +57,13 @@ the "42" pattern cells
         self.entry: Tuple[int, int] = entry
         self.exit: Tuple[int, int] = exit_
         self.is_reset_cell: bool = is_reset_cell
-        self.path: List[str] = path
+        self.path: List[Tuple[int, int]] = path
         self.colored_maze: bool = colored_maze
         self.width: int = len(grid[0])
         self.heigth: int = len(grid)
         self.front_color: Colors = front_color
         self.back_color: BackGroundColor = back_color
         self.draw_maze()
-
 
     def show_maze_with_colors(self, text: str) -> None:
         """
@@ -148,8 +119,12 @@ the "42" pattern background.
                 elif (y, colums) == self.exit and i == 1:
                     middle_line += " 🍼" + self.front_color.value
                     middle_line += " " + self.front_color.value
-                elif (y, colums) in self.path and i == 1 and (y, colums) != self.entry:
-                    middle_line += "\033[95m" + " *  " + "\033[0m" + self.front_color.value 
+                elif (
+                    (y, colums) in self.path and i == 1
+                    and (y, colums) != self.entry
+                ):
+                    middle_line += "\033[95m" + " *  " + "\033[0m"
+                    middle_line += self.front_color.value
                 else:
                     middle_line += "    " + self.front_color.value
 
@@ -189,7 +164,6 @@ the "42" pattern background.
         to create a progressive building animation effect. The rendering
         includes all walls, entry/exit markers, and the "42" pattern highlight.
         """
-        from time import sleep
         for colums in range(self.heigth):
             self.draw_top_line(colums)
             self.draw_midlle_line(colums)

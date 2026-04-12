@@ -318,7 +318,9 @@ boolean values, or integers
             if key in lst:
                 if ',' not in config[key]:
                     raise ValueError(f"',' missed in {key}")
-                config[key] = config.get(key).strip("()")
+                value = config.get(key)
+                if value is not None:
+                    config[key] = value.strip("()")
                 items = config[key].split(',')
                 if len(items) != 2:
                     raise ValueError(
@@ -398,7 +400,7 @@ def main() -> None:
         print(_.get_dict_config())
     except Exception as err:
         print(type(err))
-        print(f"Error: {str(err).strip('Value error, ')}") 
+        print(f"Error: {str(err).strip('Value error, ')}")
 
 
 if __name__ == "__main__":

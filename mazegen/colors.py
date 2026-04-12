@@ -29,6 +29,7 @@ class Colors(Enum):
     CYAN = "\033[96m"
     RESET = "\033[0m"
 
+
 def get_front_color(colored_maze: bool = True) -> Colors:
     """
     Returns a random foreground color or white
@@ -39,6 +40,7 @@ def get_front_color(colored_maze: bool = True) -> Colors:
     colors: List[Colors] = [c for c in Colors if c != Colors.RESET]
     return random.choice(colors)
 
+
 def get_back_color() -> BackGroundColor:
     """
     Returns a random background color
@@ -46,4 +48,3 @@ def get_back_color() -> BackGroundColor:
     """
     colors: List[BackGroundColor] = [c for c in BackGroundColor]
     return random.choice(colors)
-

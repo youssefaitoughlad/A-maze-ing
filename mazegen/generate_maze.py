@@ -1,5 +1,4 @@
-from typing import List, Dict, Tuple, Union, Any, Optional
-from mazegen.colors import *
+from typing import List, Dict, Tuple, Any, Optional, Set, Deque
 from mazegen._42_cells import reset_cells
 from mazegen._cell import Cell
 from collections import deque
@@ -13,6 +12,7 @@ class MazeGenerator():
         "S": (0, 1),
         "W": (-1, 0)
     }
+
     def __init__(
         self,
         height: int,
@@ -39,7 +39,6 @@ class MazeGenerator():
             [Cell(x, y) for x in range(self.width)] for y in range(self.height)
             ]
 
-
     def get_neighbors(self, current_cell: Cell) -> Dict[str, Cell]:
         neighbors: Dict[str, Cell] = {}
         height: int = len(self.grid) - 1
@@ -56,7 +55,6 @@ class MazeGenerator():
             neighbors["W"] = self.grid[cell_y][cell_x - 1]
 
         return neighbors
-
 
     def remove_wall(self, cell: Cell, neighbor: Cell) -> None:
         dx = neighbor.x - cell.x
@@ -75,10 +73,9 @@ class MazeGenerator():
             cell.walls["N"] = False
             neighbor.walls["S"] = False
 
-
     def get_unvisited_neighbors(
         self, current_cell: Cell
-        ) -> Dict[str, Cell]:
+    ) -> Dict[str, Cell]:
         neighbors = self.get_neighbors(current_cell)
 
         unvisited_neighbors: Dict[str, Cell] = {}
@@ -101,10 +98,9 @@ class MazeGenerator():
 
         return coordinates
 
-
     def reconstruct_path(
         self, parent: Dict[Tuple[int, int], Tuple[Tuple[int, int], str]]
-        ) -> List[str]:
+    ) -> List[str]:
         path: List[str] = []
         current: Tuple[int, int] = self.exit
 
@@ -116,24 +112,24 @@ class MazeGenerator():
         path.reverse()
         return path
 
-
     def shortest_path(self) -> List[str]:
-        parent: Optional[Dict[Tuple[int, int], Tuple[Tuple[int, int], str]]] = self.bfs()
+        parent: Optional[Dict[Tuple[int, int], Tuple[Tuple[int, int], str]]]
+        parent = self.bfs()
 
         if parent is None:
             return []
 
         return self.reconstruct_path(parent)
 
-
     def can_move(self, x: int, y: int, direction: str) -> bool:
         cell: Cell = self.grid[y][x]
         return not cell.walls[direction]
 
-
-    def bfs(self) -> Optional[Dict[Tuple[int, int], Tuple[Tuple[int, int], str]]]:
-        queue: deque = deque()
-        visited: set = set()
+    def bfs(
+        self
+    ) -> Optional[Dict[Tuple[int, int], Tuple[Tuple[int, int], str]]]:
+        queue: Deque[Tuple[int, int]] = deque()
+        visited: Set[Tuple[int, int]] = set()
         parent: Dict[Tuple[int, int], Tuple[Tuple[int, int], str]] = {}
 
         queue.append(self.entry)
@@ -155,12 +151,12 @@ class MazeGenerator():
                         parent[(nx, ny)] = ((cell_x, cell_y), direction)
                         queue.append((nx, ny))
 
-        return None      
-
+        return None
 
     def dfs(self, current_cell: Cell) -> Optional[Cell]:
         current_cell.visited = True
-        unvisited_neighbors: Dict[str, Cell] = self.get_unvisited_neighbors(current_cell)
+        unvisited_neighbors: Dict[str, Cell]
+        unvisited_neighbors = self.get_unvisited_neighbors(current_cell)
 
         if not unvisited_neighbors:
             return None
@@ -183,10 +179,9 @@ class MazeGenerator():
                 stack.append(next_cell)
             else:
                 stack.pop()
-        
+
         if not self.perfect:
             self.break_random_walls()
-        
 
     def is_open_square(self, x: int, y: int) -> bool:
         for dy in range(3):
@@ -214,7 +209,6 @@ class MazeGenerator():
     def is_fully_closed(self, cell: Cell) -> bool:
         return all(cell.walls.values())
 
-
     def break_random_walls(self) -> None:
         for row in self.grid:
             for cell in row:
@@ -223,7 +217,7 @@ class MazeGenerator():
                 for direction, (dx, dy) in self.DIRECTIONS.items():
                     nx, ny = cell.x + dx, cell.y + dy
 
-                    if 0 <= nx < len(self.grid[0]) and 0 <= ny < len(self.grid):
+                    if 0 <= nx < self.width and 0 <= ny < self.height:
                         neighbor: Cell = self.grid[ny][nx]
 
                         if self.is_fully_closed(neighbor):
@@ -231,4 +225,3 @@ class MazeGenerator():
 
                         if cell.walls[direction] and random.random() < 0.1:
                             self.remove_wall(cell, neighbor)
-
