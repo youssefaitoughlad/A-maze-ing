@@ -47,9 +47,9 @@ amazing_menu: list[str] = [
     "\n\033[95m === A-Maze-ing Menu ===\033[0m",
     "1- Regenerate New Maze",
     "2- Change Colors",
-    "3- Show/Hide path Finding",
+    "3- Animate path Finding",
     "4- Quit",
-    "\033[95mEnter your choice (1-4) : \033[0m"
+    "\033[95mPlease enter your choice (1-4): \033[0m"
 ]
 
 
