@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field, ValidationError
 from pydantic import model_validator, field_validator
 from typing import List, Tuple, Optional, Any, Dict
 from mazegen._42_cells import _42cells
+from pathlib import Path
 import os
 import ast
 
@@ -149,20 +150,34 @@ if any validation fails
         if self.exit_[1] >= self.height:
             errors.append("exit coordinates exceeded the height")
 
-        if not self.output_file.endswith(".txt"):
-            errors.append("output_file must be a .txt file")
+        exest_files = [
+            "goodby_banner.txt",
+            "config.txt",
+            "requirements.txt",
+            "amazing_banner.txt"
+        ]
+        path = Path(self.output_file)
+        extantions = path.suffixes
+        print(f"extantion: {extantions}")
+        if len(extantions):
+            if extantions[-1] != ".txt":
+                errors.append("output_file must be a .txt file")
+            if self.output_file in exest_files:
+                errors.append(f"'{self.output_file}' name is already reserved!")
 
         directory = os.path.dirname(os.path.abspath(self.output_file)) or '.'
+        print(f"dir: {directory}")
         if directory and not os.path.exists(directory):
             errors.append(f"Directory does not exist: {directory}")
 
         elif directory and not os.access(directory, os.W_OK):
             errors.append(f"Cannot write to directory: {directory}")
 
-        current_path = "./" + self.output_file
+        current_path = f"{directory}/" + self.output_file
         if os.path.exists(current_path):
             if not os.access(current_path, os.W_OK):
                 errors.append(f"Cannot write to file: {self.output_file}")
+
 
         _42_pattern = _42cells(self.width, self.height)
         if self.entry in _42_pattern:
