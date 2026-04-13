@@ -125,7 +125,7 @@ with comprehensive error handling.
         except Exception as err:
             raise RuntimeError(
                 f"Unexpected error while loading config from '{path}':"
-                f"{str(err).strip('Value error, ')}"
+                f"{err}"
             ) from err
 
     def _build_maze(self) -> None:
@@ -259,6 +259,8 @@ def main() -> None:
         Amazing().run()
     except (Exception, BaseException) as e:
         print(e)
+        import sys
+        sys.exit(1)
 
 
 if __name__ == "__main__":

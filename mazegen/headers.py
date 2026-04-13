@@ -27,7 +27,7 @@ def type_writer(text: str, delay: float = 0.002) -> None:
 
 
 amazing_banner: str = Path(
-    "/home/yait-oug/Desktop/A-maze-inesh/amazing_banner.txt"
+    "./amazing_banner.txt"
     ).read_text()
 
 intro_lines: list[str] = [
@@ -40,14 +40,14 @@ intro_lines: list[str] = [
 ]
 
 goodby_banner: str = Path(
-    "/home/yait-oug/Desktop/A-maze-inesh/goodby_banner.txt"
+    "./goodby_banner.txt"
     ).read_text()
 
 amazing_menu: list[str] = [
     "\n\033[95m === A-Maze-ing Menu ===\033[0m",
     "1- Regenerate New Maze",
     "2- Change Colors",
-    "3- Animate path Finding",
+    "3- Show/Hide path Finding",
     "4- Quit",
     "\033[95mEnter your choice (1-4) : \033[0m"
 ]

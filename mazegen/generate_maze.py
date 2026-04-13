@@ -48,6 +48,10 @@ class MazeGenerator():
         seed: Any,
         perfect: bool = True,
     ) -> None:
+        """
+        Initialize the maze generator
+        with configuration parameters.
+        """
         self.height: int = height
         self.width: int = width
         self.entry: Tuple[int, int] = entry

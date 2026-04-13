@@ -53,11 +53,11 @@ cross-field constraints
             The validated dimension value
 
         Raises:
-            ValueError:If dimension is less than 3 or greater than 30
+            ValueError:If dimension is less than 9 or greater than 30
         """
         if v < 9:
             raise ValueError(
-                f"Maze sizes must be > 3, i got {v}"
+                f"Maze sizes must be >= 9, i got {v}"
             )
         if v > 30:
             raise ValueError(
@@ -399,7 +399,7 @@ def main() -> None:
         _ = ConfigParser("./config.txt")
         print(_.get_dict_config())
     except Exception as err:
-        print(f"Error: {str(err).strip('Value error, ')}")
+        print(f"Error: {err}")
 
 
 if __name__ == "__main__":

@@ -15,7 +15,7 @@ debug:
 	poetry run python3 -m pdb $(MAIN) $(CONFIG)
 
 
-Clean:
+clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type d -name ".mypy_cache" -exec rm -rf {} +
 	find . -type d -name "dist" -exec rm -rf {} +
@@ -24,7 +24,7 @@ Clean:
 
 lint:
 	poetry run flake8 .
-	poetry run mypy . --war-return-any \
+	poetry run mypy . --warn-return-any \
 		--warn-unused-ignores \
 		--ignore-missing-imports \
 		--disallow-untyped-defs \

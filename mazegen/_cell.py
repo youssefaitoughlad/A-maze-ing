@@ -23,6 +23,10 @@ class Cell:
             x: int,
             y: int
             ) -> None:
+        """
+        Initialize a new cell at
+        the specified grid coordinates.
+        """
         self.x: int = x
         self.y: int = y
         self.visited: bool = False
