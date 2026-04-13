@@ -224,7 +224,7 @@ with comprehensive error handling.
         system('clear')
         self._build_maze()
         self._show_maze(is_reset=True)
-        choice = show_menu()
+        choice = show_menu().strip()
 
         while True:
             system('clear')
@@ -243,7 +243,7 @@ with comprehensive error handling.
                         "Invalid menu choice."
                         "Please select a valid option from the menu."
                         )
-            choice = show_menu()
+            choice = show_menu().strip()
 
 
 def main() -> None:

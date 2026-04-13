@@ -46,8 +46,8 @@ goodby_banner: str = Path(
 amazing_menu: list[str] = [
     "\n\033[95m === A-Maze-ing Menu ===\033[0m",
     "1- Regenerate New Maze",
-    "2- Change Colors",
-    "3- Animate path Finding",
+    "2- Show/Hide path Finding",
+    "3- Change Colors",
     "4- Quit",
     "\033[95mPlease enter your choice (1-4): \033[0m"
 ]
