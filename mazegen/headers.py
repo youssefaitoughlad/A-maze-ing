@@ -1,6 +1,8 @@
 from pathlib import Path
 from os import system
 import time
+import termios
+import sys
 
 
 def type_writer(text: str, delay: float = 0.002) -> None:
@@ -53,6 +55,14 @@ amazing_menu: list[str] = [
 ]
 
 
+def flush_input() -> None:
+    """Clear any pending keyboard input."""
+    try:
+        termios.tcflush(sys.stdin, termios.TCIFLUSH)
+    except OSError:
+        pass
+
+
 def show_amazing_banner() -> None:
     """
     Display the animated welcome banner and introduction sequence.
@@ -68,6 +78,7 @@ def show_amazing_banner() -> None:
     for line in intro_lines:
         type_writer(line, 0.03)
     time.sleep(2)
+    flush_input()
 
 
 def show_goodby_banner() -> None:

@@ -133,11 +133,117 @@ Specifically, AI was used for:
 * **Extensibility**: Modular design allows easy feature extension.
 
 
-## Configuration File Format
+## Configuration Format (Detailed)
 
-The configuration file uses `KEY=VALUE` syntax. Lines starting with `#` are ignored as comments.
+The configuration file follows a strict `KEY=VALUE` format:
 
-## Configuration File Format
+```text
+WIDTH=20
+HEIGHT=15
+ENTRY=0,0
+EXIT=19,14
+OUTPUT_FILE=maze.txt
+PERFECT=True
+SEED=42
+```
 
-The configuration file uses `KEY=VALUE` syntax. Lines starting with `#` are ignored as comments.
+### Constraints:
 
+* `WIDTH`, `HEIGHT`: positive integers (maze dimensions)
+* `ENTRY`, `EXIT`: coordinates in the form `x,y` within bounds
+* `ENTRY` must not be equal to `EXIT`
+* `PERFECT`: boolean (`True` or `False`)
+* `SEED`: optional integer for deterministic generation
+
+---
+
+## Maze Generation Algorithm
+
+The maze is generated using the **Depth-First Search (DFS) Recursive Backtracker** algorithm.
+
+### Why DFS?
+
+* Guarantees a **perfect maze** (fully connected, no cycles)
+* Simple and efficient to implement
+* Produces natural-looking maze structures
+* Works well with grid-based representations
+
+---
+
+## Reusable Components
+
+The project is designed as a reusable module (`mazegen`) with the following reusable parts:
+
+* `MazeGenerator` class:
+
+  * Can generate mazes of arbitrary sizes
+  * Supports deterministic generation via seed
+  * Exposes generation and solving functionality
+
+* Configuration parser:
+
+  * Can be reused for any structured config-based system
+
+* Solver (BFS):
+
+  * Generic shortest-path algorithm applicable to grid/graph problems
+
+These components can be integrated into other projects such as games, simulations, or pathfinding systems.
+
+---
+
+## Team & Project Management
+
+### Team Roles
+
+- **👨‍💻 yait-oug** — Core algorithm design (DFS, BFS), maze generation logic, pathfinding implementation, Visual rendering (ASCII graphics), output formatting, type hints, interactive menu system, color management, banner animations ...
+
+
+- **🎨 ilhakam** — Configuration parser (Pydantic validation), error handling, hexadecimal conversion, package building (Poetry), Makefile management, code quality (flake8/mypy integration)
+
+
+---
+
+### Planning & Evolution
+
+The project started with a clear plan:
+
+1. Build configuration parser
+2. Implement maze data structure
+3. Develop generation algorithm (DFS)
+4. Implement solver (BFS)
+5. Add output formatting and rendering
+
+During development:
+
+* Validation became stricter than initially planned
+* Modular design was reinforced to improve maintainability
+* Additional features (seed, pattern handling) were integrated progressively
+
+---
+
+### What Worked Well
+
+* Strong modular architecture
+* Clear separation of responsibilities
+* Early focus on validation reduced bugs later
+* Deterministic generation simplified debugging
+
+---
+
+### What Could Be Improved
+
+* More automated testing (unit tests)
+* Performance optimization for very large mazes
+* Additional visualization features
+
+---
+
+### Tools Used
+
+* **Poetry**: dependency management and packaging
+* **flake8 / mypy**: code quality and static typing
+* **Git**: version control and collaboration
+* **Makefile**: task automation
+
+---

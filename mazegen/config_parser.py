@@ -163,7 +163,9 @@ if any validation fails
             if extantions[-1] != ".txt":
                 errors.append("output_file must be a .txt file")
             if self.output_file in exest_files:
-                errors.append(f"'{self.output_file}' name is already reserved!")
+                errors.append(
+                    f"'{self.output_file}' name is already reserved!"
+                )
 
         directory = os.path.dirname(os.path.abspath(self.output_file)) or '.'
         print(f"dir: {directory}")
@@ -177,7 +179,6 @@ if any validation fails
         if os.path.exists(current_path):
             if not os.access(current_path, os.W_OK):
                 errors.append(f"Cannot write to file: {self.output_file}")
-
 
         _42_pattern = _42cells(self.width, self.height)
         if self.entry in _42_pattern:
@@ -356,7 +357,9 @@ boolean values, or integers
             if key == 'seed':
                 try:
                     value = ast.literal_eval(config[key])
-                    if isinstance(
+                    if value is None:
+                        config[key] = None
+                    elif isinstance(
                         value, (int, float, bool, str, bytes, bytearray)
                     ):
                         config[key] = value

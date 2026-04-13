@@ -240,7 +240,7 @@ with comprehensive error handling.
                     break
                 case _:
                     raise ValueError(
-                        "Invalid menu choice."
+                        "Invalid menu choice, "
                         "Please select a valid option from the menu."
                         )
             choice = show_menu().strip()
@@ -257,10 +257,13 @@ def main() -> None:
     """
     try:
         Amazing().run()
-    except (Exception, BaseException) as e:
-        print(e)
-        import sys
-        sys.exit(1)
+    except (Exception, KeyboardInterrupt, BaseException) as e:
+        if isinstance(e, KeyboardInterrupt):
+            print("\033[91mError: ctrl+c is invalid choice!!!\033[0m")
+        else:
+            print(f"\033[91mError: {e}\033[0m")
+        # import sys
+        # sys.exit(1)
 
 
 if __name__ == "__main__":

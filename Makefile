@@ -1,5 +1,6 @@
 MAIN = a_maze_ing.py
 CONFIG = config.txt
+EXCLUDE_DIRS = .venv,__pycache__,.git,.mypy_cache,venv
 
 .PHONY: install run debug clean lint lint-strict build
 
@@ -20,11 +21,15 @@ clean:
 	find . -type d -name ".mypy_cache" -exec rm -rf {} +
 	find . -type d -name "dist" -exec rm -rf {} +
 	find . -name "*.pyc" -exec rm -rf {} +
+	find . -type d -name "*.egg-info" -exec rm -rf {} +
+	find . -type d -name "dist" -exec rm -rf {} +
+	find . -type d -name "build" -exec rm -rf {} +
 
 
 lint:
-	poetry run flake8 .
-	poetry run mypy . --warn-return-any \
+	poetry run flake8 . --exclude $(EXCLUDE_DIRS)
+	poetry run mypy . --exclude $(EXCLUDE_DIRS) \
+		--warn-return-any \
 		--warn-unused-ignores \
 		--ignore-missing-imports \
 		--disallow-untyped-defs \
@@ -32,11 +37,12 @@ lint:
 
 
 lint-strict:
-	poetry run flake8 .
-	poetry run mypy . --strict
+	poetry run flake8 . --exclude $(EXCLUDE_DIRS) 
+	poetry run mypy . --exclude $(EXCLUDE_DIRS) --strict
 
 
 build:
 	poetry build
-	mv dist/*whl .
-	rm -rf dist
+	mv dist/*.whl .
+	mv dist/*.gz .
+	rm -rf dist build

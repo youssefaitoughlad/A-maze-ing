@@ -4,3 +4,6 @@ __pycache__
 poetry.lock
 .vscode/
 *.sh
+build/
+dist/
+*.egg-info
