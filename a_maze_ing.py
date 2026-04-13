@@ -13,8 +13,8 @@ from os import system
 class MenuChoice(Enum):
     """Enumeration of available interactive menu options."""
     GENERATE = "1"
-    COLORS = "2"
-    ANIMATE = "3"
+    ANIMATE = "2"
+    COLORS = "3"
     QUIT = "4"
 
 
@@ -231,10 +231,10 @@ with comprehensive error handling.
             match choice:
                 case MenuChoice.GENERATE.value:
                     self._handle_generate()
-                case MenuChoice.COLORS.value:
-                    self._handle_colors()
                 case MenuChoice.ANIMATE.value:
                     self._handle_animate()
+                case MenuChoice.COLORS.value:
+                    self._handle_colors()
                 case MenuChoice.QUIT.value:
                     show_goodby_banner()
                     break
