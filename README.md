@@ -16,6 +16,27 @@ The project implements a complete pipeline:
 This project focuses on algorithmic correctness, data validation, and modular system design, making it both a practical tool and a demonstration of software engineering principles.
 
 
+## Prerequisites
+
+This project uses **Poetry** for dependency management and packaging.
+
+### Install Poetry
+
+If you do not have Poetry installed, you can install it using the official installer:
+
+```bash
+curl -sSL https://install.python-poetry.org | python3 -
+```
+
+After installation, ensure Poetry is available in your PATH:
+
+```bash
+poetry --version
+```
+
+If needed, add Poetry to your shell configuration (e.g., `.bashrc`, `.zshrc`).
+
+
 ## Instructions
 
 ### Installation
