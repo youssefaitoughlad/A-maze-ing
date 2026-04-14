@@ -141,7 +141,6 @@ Specifically, AI was used for:
 
 * **DFS (Depth-First Search)** was used for maze generation to produce perfect mazes with a single unique path between cells.
 * **BFS (Breadth-First Search)** was chosen for pathfinding to guarantee the shortest path.
-* **Bitmask Encoding** allows compact and efficient representation of maze walls.
 * **Poetry** was used for dependency management and packaging to ensure reproducibility.
 
 ---
