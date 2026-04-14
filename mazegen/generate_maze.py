@@ -267,6 +267,32 @@ class MazeGenerator():
         if not self.perfect:
             self.break_random_walls()
 
+        if self.has_open_square():
+            self.generate_maze()
+
+    def is_open_square(self, x: int, y: int) -> bool:
+        for dy in range(3):
+            for dx in range(3):
+                current_cell: Cell = self.grid[dy + y][dx + x]
+
+                if (
+                    dx < 2 and current_cell.walls["E"]
+                    or dy < 2 and current_cell.walls["S"]
+                ):
+                    return False
+        return True
+
+    def has_open_square(self) -> bool:
+        height: int = len(self.grid)
+        width: int = len(self.grid[0])
+
+        for y in range(height - 2):
+            for x in range(width - 2):
+                if self.is_open_square(x, y):
+                    return True
+
+        return False
+
     def is_fully_closed(self, cell: Cell) -> bool:
         """
         Check if a cell has all four

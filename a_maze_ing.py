@@ -1,10 +1,10 @@
-from mazegen.draw_maze import DrawMaze
+from draw_maze import DrawMaze
 from mazegen.generate_maze import MazeGenerator
 from mazegen.config_parser import ConfigParser
-from mazegen.headers import show_menu, show_goodby_banner, show_amazing_banner
-from mazegen.maze2hex import save_output
-from mazegen.colors import Colors, BackGroundColor
-from mazegen.colors import get_front_color, get_back_color
+from headers import show_menu, show_goodby_banner, show_amazing_banner
+from maze2hex import save_output
+from colors import Colors, BackGroundColor
+from colors import get_front_color, get_back_color
 from typing import Dict, Any, List, Tuple
 from enum import Enum
 from os import system

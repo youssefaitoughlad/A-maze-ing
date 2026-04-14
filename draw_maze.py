@@ -1,6 +1,6 @@
 from mazegen._42_cells import _42cells
 from mazegen._cell import Cell
-from mazegen.colors import Colors, BackGroundColor
+from colors import Colors, BackGroundColor
 from typing import List, Tuple
 
 
