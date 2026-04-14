@@ -265,5 +265,3 @@ During development:
 * **flake8 / mypy**: code quality and static typing
 * **Git**: version control and collaboration
 * **Makefile**: task automation
-
----
