@@ -109,23 +109,3 @@ def show_menu() -> str:
     for item in amazing_menu[:-1]:
         print(item)
     return input(amazing_menu[-1])
-
-
-def get_valid_choice() -> str:
-    """
-    Get and validate user menu selection with input loop.
-
-    Continuously displays the menu and prompts the user until a valid
-    choice (1, 2, 3, or 4) is provided. Invalid inputs trigger an error
-    message and re-prompt without crashing, maintaining robustness as
-    required by the subject. This function ensures the main program
-    only receives valid menu commands.
-
-    Returns:
-        Validated choice string: one of '1', '2', '3', or '4'
-    """
-    while True:
-        choice = show_menu().strip()
-        if choice in ("1", "2", "3", "4"):
-            return choice
-        print("Invalid choice. Please enter a number between 1 and 4.")

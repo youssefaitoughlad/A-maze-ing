@@ -35,6 +35,7 @@ that belong to the "42" pattern.
         Each coordinate is valid within
 the maze bounds (assumes caller validates size).
     """
+    maze_height = maze_height * 1
     half_maze_width = (maze_width // 2)
     cells = [
         (half_maze_width + 2, half_maze_width - 2),

@@ -267,37 +267,6 @@ class MazeGenerator():
         if not self.perfect:
             self.break_random_walls()
 
-    def is_open_square(self, x: int, y: int) -> bool:
-        """
-        Check if a 3x3 area starting at (x,y) forms an open region.
-
-        This is used to enforce the subject's requirement that corridors
-        cannot be wider than 2 cells. A 3x3 open area would violate this
-        constraint, so the method detects such patterns.
-        """
-        for dy in range(3):
-            for dx in range(3):
-                current_cell: Cell = self.grid[dy + y][dx + x]
-
-                if (
-                    dx < 2 and current_cell.walls["E"]
-                    or dy < 2 and current_cell.walls["S"]
-                ):
-                    return False
-        return True
-
-    def has_open_square(self) -> bool:
-        """Scan the entire maze for any 3x3 open area violation."""
-        height: int = len(self.grid)
-        width: int = len(self.grid[0])
-
-        for y in range(height - 2):
-            for x in range(width - 2):
-                if self.is_open_square(x, y):
-                    return True
-
-        return False
-
     def is_fully_closed(self, cell: Cell) -> bool:
         """
         Check if a cell has all four
