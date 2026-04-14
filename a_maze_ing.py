@@ -262,8 +262,6 @@ def main() -> None:
             print("\033[91mError: ctrl+c is invalid choice!!!\033[0m")
         else:
             print(f"\033[91mError: {e}\033[0m")
-        # import sys
-        # sys.exit(1)
 
 
 if __name__ == "__main__":
