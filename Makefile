@@ -21,7 +21,7 @@ clean:
 	find . -type d -name ".mypy_cache" -exec rm -rf {} +
 	find . -type d -name "dist" -exec rm -rf {} +
 	find . -name "*.pyc" -exec rm -rf {} +
-	find . -type d -name "*.egg-info" -exec rm -rf {} +
+	find . -name "*.egg-info" -exec rm -rf {} +
 	find . -type d -name "dist" -exec rm -rf {} +
 	find . -type d -name "build" -exec rm -rf {} +
 
