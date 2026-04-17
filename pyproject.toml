@@ -1,5 +1,5 @@
 [project]
-name = "a-maze-ing"
+name = "mazegen"
 version = "0.1.0"
 description = ""
 authors = [
